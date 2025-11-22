@@ -5,7 +5,7 @@ Este projeto foca-se na geração segura de chaves, cifra/decifra de ficheiros u
 
 ---
 
-## 📌 Overview
+## Overview
 
 Este projeto explora os fundamentos da **criptografia simétrica por blocos** utilizando as bibliotecas de segurança nativas do Java (`javax.crypto`).
 Inclui:
@@ -22,16 +22,17 @@ Inclui:
 
 ---
 
-## 🛠️ Tecnologias Utilizadas
+## Tecnologias Utilizadas
 
 - Java 23 (JDK 23)
 - Maven (gestor de builds)
 - Java Cryptography Architecture (JCA)
 - Java Cryptography Extension (JCE)
+- JUnit 5 (testes unitários)
 
 ---
 
-## 📦 Estrutura do Projeto
+## Estrutura do Projeto
 
 ```
 src/
@@ -53,7 +54,7 @@ src/
 
 ---
 
-## ⚙️ Instruções de Build
+## Instruções de Build
 
 ### Compilar o projeto:
 
@@ -69,7 +70,7 @@ java -cp target/classes si.gustavogiao.crypto.<ClassName> <args>
 
 ---
 
-## 🔐 Geração de Chave
+## Geração de Chave
 
 ```bash
 java -cp target/classes si.gustavogiao.crypto.GenerateKey <ficheiro-chave> <algoritmo> <tamanho>
@@ -83,7 +84,7 @@ java -cp target/classes si.gustavogiao.crypto.GenerateKey chaveAES.bin AES 256
 
 ---
 
-## 🔒 Cifra de Ficheiros
+## Cifra de Ficheiros
 
 ```bash
 java -cp target/classes si.gustavogiao.crypto.EncryptFile <ficheiroClaro> <ficheiroCifrado> <chave> <transformacao>
@@ -97,7 +98,7 @@ java -cp target/classes si.gustavogiao.crypto.EncryptFile message.txt message.en
 
 ---
 
-## 🔓 Decifra de Ficheiros
+## Decifra de Ficheiros
 
 ```bash
 java -cp target/classes si.gustavogiao.crypto.DecryptFile <ficheiroCifrado> <ficheiroDecifrado> <chave> <transformacao>
@@ -111,7 +112,7 @@ java -cp target/classes si.gustavogiao.crypto.DecryptFile message.enc message_de
 
 ---
 
-## 🧪 Validação
+## Validação
 
 1. Criar ficheiro:
 ```bash
@@ -135,7 +136,13 @@ diff teste.txt teste_dec.txt
 
 ---
 
-## 📌 Requisitos Adicionais & Ambiente
+## Criação de Testes JUNIT 5
+
+Para visualizar os testes unitários, abra o projeto na sua IDE favorita (IntelliJ, Eclipse, NetBeans) e navegue até à pasta `src/test/java/si/gustavogiao/crypto/`.
+Lá encontrará os testes JUnit 5 para as funcionalidades de geração de chave, cifra e decifra.
+---
+
+## Requisitos Adicionais & Ambiente
 
 ### Requisitos
 
