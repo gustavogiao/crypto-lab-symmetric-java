@@ -4,17 +4,15 @@ import javax.crypto.Cipher;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 import java.io.FileOutputStream;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.security.SecureRandom;
 
 public class EncryptFile {
 
-    public static void main(String[] args) throws Exception {
+    public static void main(String[] args) {
 
         if (args.length != 4) {
-            System.out.println("Usage: java EncryptFile <plainFile> <encryptedFile> <keyFile> <transformation>");
-            System.out.println("Example: java EncryptFile msg.txt msg.enc keyAES.bin \"AES/CBC/PKCS5Padding\"");
+            System.out.println("Usage: java -cp target/classes EncryptFile <plainFile> <encryptedFile> <keyFile> <transformation>");
+            System.out.println("Example: java -cp target/classes si.gustavogiao.crypto.EncryptFile message.txt message.enc chaveAES.bin \"AES/CBC/PKCS5Padding\"");
             return;
         }
 
@@ -23,33 +21,35 @@ public class EncryptFile {
         String keyFile = args[2];
         String transformation = args[3];
 
-        String algorithm = transformation.split("/")[0];
+        try {
+            String algorithm = CryptoUtils.extractAlgorithm(transformation);
+            SecretKeySpec secretKey = CryptoUtils.loadKey(keyFile, algorithm);
+            byte[] plainBytes = CryptoUtils.readFile(inputFile);
 
-        byte[] keyBytes = Files.readAllBytes(Paths.get(keyFile));
-        SecretKeySpec secretKey = new SecretKeySpec(keyBytes, algorithm);
+            Cipher cipher = Cipher.getInstance(transformation);
+            int blockSize = cipher.getBlockSize();
 
-        byte[] plainBytes = Files.readAllBytes(Paths.get(inputFile));
+            byte[] iv = new byte[blockSize];
+            new SecureRandom().nextBytes(iv);
 
-        Cipher cipher = Cipher.getInstance(transformation);
+            IvParameterSpec ivSpec = new IvParameterSpec(iv);
 
-        int blockSize = cipher.getBlockSize();
-        byte[] iv = new byte[blockSize];
-        new SecureRandom().nextBytes(iv);
+            cipher.init(Cipher.ENCRYPT_MODE, secretKey, ivSpec);
 
-        IvParameterSpec ivSpec = new IvParameterSpec(iv);
+            byte[] cipherBytes = cipher.doFinal(plainBytes);
 
-        cipher.init(Cipher.ENCRYPT_MODE, secretKey, ivSpec);
+            try (FileOutputStream fos = new FileOutputStream(outputFile)) {
+                fos.write(iv);
+                fos.write(cipherBytes);
+            }
 
-        byte[] cipherBytes = cipher.doFinal(plainBytes);
+            System.out.println("Encryption completed.");
+            System.out.println(" - Input: " + inputFile);
+            System.out.println(" - Output: " + outputFile);
+            System.out.println(" - Key: " + keyFile);
 
-        try (FileOutputStream fos = new FileOutputStream(outputFile)) {
-            fos.write(iv);
-            fos.write(cipherBytes);
+        } catch (Exception e) {
+            System.out.println("Encryption error: " + e.getMessage());
         }
-
-        System.out.println("Encryption completed successfully.");
-        System.out.println("Input file: " + inputFile);
-        System.out.println("Output file: " + outputFile);
-        System.out.println("Key file: " + keyFile);
     }
 }

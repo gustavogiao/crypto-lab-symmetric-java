@@ -4,16 +4,14 @@ import javax.crypto.Cipher;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 import java.io.FileOutputStream;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 
 public class DecryptFile {
 
-    public static void main(String[] args) throws Exception {
+    public static void main(String[] args) {
 
         if (args.length != 4) {
-            System.out.println("Usage: java DecryptFile <encryptedFile> <decryptedFile> <keyFile> <transformation>");
-            System.out.println("Example: java DecryptFile msg.enc msg_out.txt keyAES.bin \"AES/CBC/PKCS5Padding\"");
+            System.out.println("Usage: java -cp target/classes DecryptFile <encryptedFile> <decryptedFile> <keyFile> <transformation>");
+            System.out.println("Example: java -cp target/classes si.gustavogiao.crypto.DecryptFile message.enc message_dec.txt chaveAES.bin \"AES/CBC/PKCS5Padding\"");
             return;
         }
 
@@ -22,35 +20,43 @@ public class DecryptFile {
         String keyFile = args[2];
         String transformation = args[3];
 
-        String algorithm = transformation.split("/")[0];
+        try {
+            String algorithm = CryptoUtils.extractAlgorithm(transformation);
+            SecretKeySpec secretKey = CryptoUtils.loadKey(keyFile, algorithm);
+            byte[] encrypted = CryptoUtils.readFile(inputFile);
 
-        byte[] keyBytes = Files.readAllBytes(Paths.get(keyFile));
-        SecretKeySpec secretKey = new SecretKeySpec(keyBytes, algorithm);
+            Cipher cipher = Cipher.getInstance(transformation);
+            int blockSize = cipher.getBlockSize();
 
-        byte[] encrypted = Files.readAllBytes(Paths.get(inputFile));
 
-        Cipher cipher = Cipher.getInstance(transformation);
-        int blockSize = cipher.getBlockSize();
+            if (encrypted.length < blockSize) {
+                System.out.println("Error: file too small to contain IV.");
+                return;
+            }
 
-        byte[] iv = new byte[blockSize];
-        System.arraycopy(encrypted, 0, iv, 0, blockSize);
+            byte[] iv = new byte[blockSize];
+            System.arraycopy(encrypted, 0, iv, 0, blockSize);
 
-        IvParameterSpec ivSpec = new IvParameterSpec(iv);
+            IvParameterSpec ivSpec = new IvParameterSpec(iv);
 
-        byte[] cipherBytes = new byte[encrypted.length - blockSize];
-        System.arraycopy(encrypted, blockSize, cipherBytes, 0, cipherBytes.length);
+            byte[] cipherBytes = new byte[encrypted.length - blockSize];
+            System.arraycopy(encrypted, blockSize, cipherBytes, 0, cipherBytes.length);
 
-        cipher.init(Cipher.DECRYPT_MODE, secretKey, ivSpec);
+            cipher.init(Cipher.DECRYPT_MODE, secretKey, ivSpec);
 
-        byte[] plainBytes = cipher.doFinal(cipherBytes);
+            byte[] plainBytes = cipher.doFinal(cipherBytes);
 
-        try (FileOutputStream fos = new FileOutputStream(outputFile)) {
-            fos.write(plainBytes);
+            try (FileOutputStream fos = new FileOutputStream(outputFile)) {
+                fos.write(plainBytes);
+            }
+
+            System.out.println("Decryption completed.");
+            System.out.println(" - Input: " + inputFile);
+            System.out.println(" - Output: " + outputFile);
+            System.out.println(" - Key: " + keyFile);
+
+        } catch (Exception e) {
+            System.out.println("Decryption error: " + e.getMessage());
         }
-
-        System.out.println("Decryption completed successfully.");
-        System.out.println("Input file: " + inputFile);
-        System.out.println("Output file: " + outputFile);
-        System.out.println("Key file: " + keyFile);
     }
 }

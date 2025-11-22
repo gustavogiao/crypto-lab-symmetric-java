@@ -1,39 +1,37 @@
-# Java Cryptography Suite
+# Java Cryptography Suite - Instruções de Uso
 
-A symmetric cryptography toolkit implemented in Java for the university course **Segurança Informática** (3rd Year, 1st Semester).  
-This project focuses on secure key generation, AES file encryption/decryption, and support for user-defined cryptographic transformations.
+Um ‘toolkit’ de criptografia simétrica implementado em Java para a unidade curricular **Segurança Informática** (3º Ano, 1º Semestre).
+Este projeto foca-se na geração segura de chaves, cifra/decifra de ficheiros usando AES e suporte para transformações criptográficas definidas pelo utilizador.
 
 ---
 
 ## 📌 Overview
 
-This project explores the fundamentals of **symmetric block cipher cryptography** using Java’s built-in security libraries (`javax.crypto`).  
-It includes:
+Este projeto explora os fundamentos da **criptografia simétrica por blocos** utilizando as bibliotecas de segurança nativas do Java (`javax.crypto`).
+Inclui:
 
-- Secure generation of symmetric keys (AES, DES, etc.)
-- Binary-safe file encryption
-- Binary-safe file decryption
-- IV generation and handling (CBC mode)
-- Support for **arbitrary cryptographic transformations**, such as:
+- Geração segura de chaves simétricas (AES, DES, etc.)
+- Cifra de ficheiros (binário seguro)
+- Decifra de ficheiros (binário seguro)
+- Geração e utilização de IV (vetor de inicialização)
+- Suporte para **transformações criptográficas personalizadas**, como:
     - `AES/CBC/PKCS5Padding`
     - `AES/ECB/PKCS5Padding`
     - `AES/CTR/NoPadding`
-    - and others supported by the JVM
-
-The implementation follows the requirements defined in the official practical assignment for the course.
+    - Entre outras suportadas pela JVM
 
 ---
 
-## 🛠️ Technologies Used
+## 🛠️ Tecnologias Utilizadas
 
-- **Java 23 (JDK 23)**
-- **Maven** (project management & build)
+- Java 23 (JDK 23)
+- Maven (gestor de builds)
 - Java Cryptography Architecture (JCA)
 - Java Cryptography Extension (JCE)
 
 ---
 
-## 📦 Project Structure
+## 📦 Estrutura do Projeto
 
 ```
 src/
@@ -44,95 +42,159 @@ src/
                 └── crypto/
                     ├── GenerateKey.java
                     ├── EncryptFile.java
-                    └── DecryptFile.java
+                    ├── DecryptFile.java
+                    └── CryptoUtils.java
 ```
 
-
-- `GenerateKey` → Generates a symmetric key using the chosen algorithm and key size
-- `EncryptFile` → Encrypts a file (binary-safe)
-- `DecryptFile` → Decrypts a previously encrypted file
+- `GenerateKey` → Gera uma chave simétrica
+- `EncryptFile` → Cifra ficheiros
+- `DecryptFile` → Decifra ficheiros
+- `CryptoUtils` → Funções utilitárias comuns para cifra/decifra (carregar chave, ler ficheiros, extrair algoritmo, etc.)
 
 ---
 
-## ⚙️ Build Instructions
+## ⚙️ Instruções de Build
 
-### Compile the project:
+### Compilar o projeto:
 
 ```bash
 mvn clean compile
 ```
-### Run a spefic tool:
+
+### Executar uma classe:
+
 ```bash
 java -cp target/classes si.gustavogiao.crypto.<ClassName> <args>
 ```
 
-### 🔐 Key Generation
+---
 
-Generates a symmetric key using the algorithm and size chosen by the user.
+## 🔐 Geração de Chave
+
 ```bash
-java -cp target/classes si.gustavogiao.crypto.GenerateKey <keyfile> <algorithm> <size>
+java -cp target/classes si.gustavogiao.crypto.GenerateKey <ficheiro-chave> <algoritmo> <tamanho>
 ```
 
-Example
+Exemplo:
+
 ```bash
 java -cp target/classes si.gustavogiao.crypto.GenerateKey chaveAES.bin AES 256
 ```
-This creates a 256-bit AES key stored in chaveAES.bin (binary format).
 
-### 🔒 File Encryption
-Encrypts a file using the specified key and transformation.
+---
+
+## 🔒 Cifra de Ficheiros
+
 ```bash
-java -cp target/classes si.gustavogiao.crypto.EncryptFile <inputFile> <outputFile> <keyFile> <transformation>
+java -cp target/classes si.gustavogiao.crypto.EncryptFile <ficheiroClaro> <ficheiroCifrado> <chave> <transformacao>
 ```
-Example
+
+Exemplo:
+
 ```bash
 java -cp target/classes si.gustavogiao.crypto.EncryptFile message.txt message.enc chaveAES.bin "AES/CBC/PKCS5Padding"
 ```
-- A new IV is generated automatically
-- The output file begins with the IV (first 16 bytes)
-- The remaining bytes are the encrypted ciphertext
 
-### 🔓 File Decryption
-Decrypts a file using the specified key and transformation.
-```bash
-java -cp target/classes si.gustavogiao.crypto.DecryptFile <encryptedFile> <outputFile> <keyFile> <transformation>
-```
-Example
-```bash
-java -cp target/classes si.gustavogiao.crypto.DecryptFile message.enc message_decrypted.txt chaveAES.bin "AES/CBC/PKCS5Padding"
-```
-The program automatically:
-- Reads the first 16 bytes as the IV
-- Uses the rest of the file as ciphertext
-- Restores the original plaintext
+---
 
-### 🧪 Validation & Testing
-To verify correctness:
-1. Create a test file: 
-```bash
-echo "This is a cryptography test." > test.txt
-```
-2. Encrypt the file:
-```bash
-java -cp target/classes si.gustavogiao.crypto.EncryptFile test.txt test.enc chaveAES.bin "AES/CBC/PKCS5Padding"
-```
-3. Decrypt the file:
-```bash
-java -cp target/classes si.gustavogiao.crypto.DecryptFile test.enc test_dec.txt chaveAES.bin "AES/CBC/PKCS5Padding"
-```
-4. Compare original and decrypted files:
-```bash
-diff test.txt test_dec.txt
-```
-Files should be identical.
+## 🔓 Decifra de Ficheiros
 
-### 📘 Academic Context
+```bash
+java -cp target/classes si.gustavogiao.crypto.DecryptFile <ficheiroCifrado> <ficheiroDecifrado> <chave> <transformacao>
+```
 
-This project was developed as part of the practical assignment for the course:
-Segurança Informática (Information Security)
-University — 3rd Year, 1st Semester
-It demonstrates the practical application of symmetric cryptography concepts using Java’s JCA/JCE frameworks.
+Exemplo:
 
-### 📄 License
+```bash
+java -cp target/classes si.gustavogiao.crypto.DecryptFile message.enc message_dec.txt chaveAES.bin "AES/CBC/PKCS5Padding"
+```
 
-This project is intended for academic and educational purposes.
+---
+
+## 🧪 Validação
+
+1. Criar ficheiro:
+```bash
+echo "Teste de criptografia" > teste.txt
+```
+
+2. Cifrar:
+```bash
+java -cp target/classes si.gustavogiao.crypto.EncryptFile teste.txt teste.enc chaveAES.bin "AES/CBC/PKCS5Padding"
+```
+
+3. Decifrar:
+```bash
+java -cp target/classes si.gustavogiao.crypto.DecryptFile teste.enc teste_dec.txt chaveAES.bin "AES/CBC/PKCS5Padding"
+```
+
+4. Comparar:
+```bash
+diff teste.txt teste_dec.txt
+```
+
+---
+
+## 📌 Requisitos Adicionais & Ambiente
+
+### Requisitos
+
+- Java JDK 23 ou superior
+- Maven 3.9+ (opcional)
+
+---
+
+## 💻 Ambiente de Desenvolvimento
+
+Desenvolvido usando:
+
+- IntelliJ IDEA Community Edition 2025.2.5
+- Maven 3.9.11
+- Windows 11 (compatível com Linux e macOS)
+
+Outras IDEs compatíveis:
+- Eclipse
+- NetBeans
+- VS Code (Extensão Java)
+
+---
+
+## 🔄 Executar Sem Maven
+
+### Compilar manualmente:
+
+```bash
+javac -d out src/main/java/si/gustavogiao/crypto/*.java
+```
+
+### Executar:
+
+```bash
+java -cp out si.gustavogiao.crypto.GenerateKey chaveAES.bin AES 256
+```
+
+---
+
+## 🧭 Compatibilidade
+
+- Windows 11
+- Ubuntu Linux
+- macOS Ventura
+
+No Windows, se `diff` não existir:
+```bash
+fc teste.txt teste_dec.txt
+```
+
+---
+
+## 📘 Contexto Académico
+
+Projeto desenvolvido para a unidade curricular **Segurança Informática**  
+3º Ano, 1º Semestre.
+
+---
+
+## 📄 Licença
+
+Projeto para fins académicos e educativos.

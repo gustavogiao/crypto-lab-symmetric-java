@@ -1,0 +1,1 @@
+As instruções para o uso do projeto estão detalhadas no README.md localizado na raiz do repositório.
