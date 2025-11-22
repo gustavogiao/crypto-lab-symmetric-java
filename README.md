@@ -138,7 +138,7 @@ diff teste.txt teste_dec.txt
 
 ## Criação de Testes JUNIT 5
 
-Para visualizar os testes unitários, abra o projeto na sua IDE favorita (IntelliJ, Eclipse, NetBeans) e navegue até à pasta `src/test/java/si/gustavogiao/crypto/`.
+- Para visualizar os testes unitários, abra o projeto na sua IDE favorita (IntelliJ, Eclipse, NetBeans) e navegue até à pasta `src/test/java/si/gustavogiao/crypto/`.
 Lá encontrará os testes JUnit 5 para as funcionalidades de geração de chave, cifra e decifra.
 ---
 
