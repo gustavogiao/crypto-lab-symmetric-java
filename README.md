@@ -151,7 +151,7 @@ Lá encontrará os testes JUnit 5 para as funcionalidades de geração de chave,
 
 ---
 
-## 💻 Ambiente de Desenvolvimento
+## Ambiente de Desenvolvimento
 
 Desenvolvido usando:
 
@@ -166,7 +166,7 @@ Outras IDEs compatíveis:
 
 ---
 
-## 🔄 Executar Sem Maven
+## Executar Sem Maven
 
 ### Compilar manualmente:
 
@@ -195,13 +195,13 @@ fc teste.txt teste_dec.txt
 
 ---
 
-## 📘 Contexto Académico
+## Contexto Académico
 
 Projeto desenvolvido para a unidade curricular **Segurança Informática**  
 3º Ano, 1º Semestre.
 
 ---
 
-## 📄 Licença
+## Licença
 
 Projeto para fins académicos e educativos.
