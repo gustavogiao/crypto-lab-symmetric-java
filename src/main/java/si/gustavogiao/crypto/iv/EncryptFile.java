@@ -1,4 +1,4 @@
-package si.gustavogiao.crypto;
+package si.gustavogiao.crypto.iv;
 
 import javax.crypto.Cipher;
 import javax.crypto.spec.IvParameterSpec;
@@ -11,8 +11,8 @@ public class EncryptFile {
     public static void main(String[] args) {
 
         if (args.length != 5) {
-            System.out.println("Usage: java -cp target/classes si.gustavogiao.crypto.EncryptFile <plainFile> <encryptedFile> <keyFile> <transformation> <ivFile>");
-            System.out.println("Example: java -cp target/classes si.gustavogiao.crypto.EncryptFile message.txt message.enc chaveAES.bin \"AES/CBC/PKCS5Padding\" iv.bin");
+            System.out.println("Usage: java -cp target/classes si.gustavogiao.crypto.iv.EncryptFile <plainFile> <encryptedFile> <keyFile> <transformation> <ivFile>");
+            System.out.println("Example: java -cp target/classes si.gustavogiao.crypto.iv.EncryptFile message.txt message.enc chaveAES.bin \"AES/CBC/PKCS5Padding\" iv.bin");
             return;
         }
 

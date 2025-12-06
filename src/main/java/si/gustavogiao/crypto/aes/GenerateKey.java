@@ -1,4 +1,4 @@
-package si.gustavogiao.crypto;
+package si.gustavogiao.crypto.aes;
 
 import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
