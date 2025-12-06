@@ -1,4 +1,4 @@
-# Java Cryptography Suite - Usage Instructions (English)
+# Java Cryptography Suite - Usage Instructions
 
 A symmetric cryptography toolkit implemented in Java for the course **Information Security** (3rd Year, 1st Semester).
 This project focuses on secure key generation, file encryption/decryption using AES and IV-based schemes, and support for user-defined cryptographic transformations.
